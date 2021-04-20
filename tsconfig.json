@@ -4,6 +4,7 @@
     "target": "ESNext",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "types": ["vite/client"],
+    "checkJs": false,
     "allowJs": false,
     "skipLibCheck": false,
     "esModuleInterop": false,

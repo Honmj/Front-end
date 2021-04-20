@@ -1,11 +1,6 @@
 ##你好呀
-Please read me!
 
-Hello,world!
-
-Maybe I am  fate.
-
-I am Iron man.
+vite2.x + react + typescript + antd4.x  + hox/recoil 的小demo
 
 
 This is master version.
