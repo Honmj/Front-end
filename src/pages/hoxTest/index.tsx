@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { Button,Input,Checkbox } from 'antd'
-import {useHistory} from 'react-router-dom'
-import { useTodoListStateModel,IlistItem } from '@/store/useCountModel'
-
+import React, { useEffect, useState } from 'react';
+import { Button, Input, Checkbox } from 'antd';
+import { useHistory } from 'react-router-dom';
+import { useTodoListStateModel, IlistItem } from '@/store/useCountModel';
 
 let id = 0;
-const getId = () => {
-  return id++;
-}
-const  TodoItemCreator = () => {
+const getId = () => id++;
+const TodoItemCreator = () => {
   const [inputValue, setInputValue] = useState('');
   const listState = useTodoListStateModel();
 
@@ -17,61 +14,56 @@ const  TodoItemCreator = () => {
       id: getId(),
       text: inputValue,
       isComplete: false,
-    })
+    });
     setInputValue('');
-  }
-  const onChange = ({target: {value}}) => {
+  };
+  const onChange = ({ target: { value } }) => {
     setInputValue(value);
   };
 
   return (
     <div>
-      <Input 
-        type="text" 
-        value={inputValue} 
-        onChange={onChange} 
-        style={{width: 200,marginRight: 5}} 
+      <Input
+        type="text"
+        value={inputValue}
+        onChange={onChange}
+        style={{ width: 200, marginRight: 5 }}
         placeholder="请输入待办事项"
       />
-      <Button type="primary" onClick={addItem}>Add</Button>
+      <Button type="primary" onClick={addItem}>
+        Add
+      </Button>
     </div>
   );
-}
+};
 
-function TodoItem({item}) {
+function TodoItem({ item }) {
   const listModel = useTodoListStateModel();
-  const index = listModel.list.findIndex((listItem:IlistItem) => listItem === item);
+  const index = listModel.list.findIndex((listItem: IlistItem) => listItem === item);
 
-  const editItemText = ({target: {value}}) => {
-    listModel.editItem(index,{
+  const editItemText = ({ target: { value } }) => {
+    listModel.editItem(index, {
       ...item,
       text: value,
-    })
-  }
+    });
+  };
 
   const toggleItemCompletion = () => {
-    listModel.editItem(index,{
+    listModel.editItem(index, {
       ...item,
       isComplete: !item.isComplete,
-    })
-  }
+    });
+  };
 
   const deleteItem = () => {
     listModel.deleteItem(index);
   };
 
-  useEffect(()=>{
-    return ()=>{
-
-    }
-  },[])
+  useEffect(() => () => {}, []);
   return (
     <div>
-      <Input type="text" value={item.text} onChange={editItemText} style={{width:200}}/>
-      <Checkbox 
-        checked={item.isComplete}
-        onChange={toggleItemCompletion}
-      />
+      <Input type="text" value={item.text} onChange={editItemText} style={{ width: 200 }} />
+      <Checkbox checked={item.isComplete} onChange={toggleItemCompletion} />
       <Button onClick={deleteItem}>X</Button>
     </div>
   );
@@ -80,7 +72,7 @@ function TodoItem({item}) {
 function TodoListFilters() {
   const listModel = useTodoListStateModel();
 
-  const updateFilter = ({target:{value}}) => {
+  const updateFilter = ({ target: { value } }) => {
     listModel.getFilterList(value);
   };
 
@@ -88,7 +80,7 @@ function TodoListFilters() {
     <>
       筛选:
       <select defaultValue="all" onChange={updateFilter}>
-        <option value="all" >全部</option>
+        <option value="all">全部</option>
         <option value="completed">已完成</option>
         <option value="uncompleted">未完成</option>
       </select>
@@ -102,7 +94,7 @@ function TodoListStats() {
     totalNum,
     totalCompletedNum,
     totalUncompletedNum,
-    percentCompleted
+    percentCompleted,
   } = listModel.dataCounter;
 
   const formattedPercentCompleted = Math.round(percentCompleted * 100);
@@ -118,31 +110,30 @@ function TodoListStats() {
 }
 
 function Index() {
-  const [count, setCount] = useState()
+  const [count, setCount] = useState();
   const todoList = useTodoListStateModel();
   const history = useHistory();
   return (
     <div className="about">
-      <header className="about-header">
-        我是todoList页
-      </header>
+      <header className="about-header">我是todoList页</header>
       <main>
-          <div>
-            <TodoListStats />
-            <TodoListFilters />
-            <TodoItemCreator />
+        <div>
+          <TodoListStats />
+          <TodoListFilters />
+          <TodoItemCreator />
 
-            {todoList.filterList.map((todoItem,index) => (
-              <TodoItem key={todoItem.id} item={todoItem}/>
-            ))} 
-          </div>
-        
+          {todoList.filterList.map((todoItem, index) => (
+            <TodoItem key={todoItem.id} item={todoItem} />
+          ))}
+        </div>
       </main>
       <footer>
-        <Button type="primary" onClick={()=> history.push ("/about")}>to about</Button>
+        <Button type="primary" onClick={() => history.push('/about')}>
+          to about
+        </Button>
       </footer>
     </div>
-  )
+  );
 }
 
-export default Index
+export default Index;

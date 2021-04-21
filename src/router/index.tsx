@@ -1,48 +1,42 @@
-
 import React from 'react';
-import TodoList from '../pages/hoxTest';
-import About from '../pages/about';
-import Index from '../pages/index';
-import  { IRouter }  from '@/types';
+import { IRouter } from '@/types';
 import {
   AppstoreOutlined,
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
   PieChartOutlined,
   DesktopOutlined,
   ContainerOutlined,
-  MailOutlined,
 } from '@ant-design/icons';
+import TodoList from '../pages/hoxTest';
+import About from '../pages/about';
+import Index from '../pages/index';
 
-
-const routes:IRouter[] = [
+const routes: IRouter[] = [
   {
     title: '首页',
     icon: <AppstoreOutlined />,
-    path: "/",
+    path: '/',
     component: Index,
-    
   },
   {
     title: '关于',
-    icon: <MenuUnfoldOutlined />,
-    path: "/about",
+    icon: <PieChartOutlined />,
+    path: '/about',
     component: About,
-    children:[
+    children: [
       {
         title: '关于的子页面',
-        icon: <MailOutlined />,
-        path: "/about/todo",
+        icon: <DesktopOutlined />,
+        path: '/about/todo',
         component: About,
       },
-    ]
+    ],
   },
   {
     title: '待办',
-    icon: <MenuFoldOutlined />,
-    path: "/todoList",
-    component: TodoList
-  }
+    icon: <ContainerOutlined />,
+    path: '/todoList',
+    component: TodoList,
+  },
 ];
 
-export default routes
+export default routes;
