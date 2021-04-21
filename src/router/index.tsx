@@ -32,8 +32,8 @@ const routes:IRouter[] = [
       {
         title: '关于的子页面',
         icon: <MailOutlined />,
-        path: "/todoList",
-        component: TodoList,
+        path: "/about/todo",
+        component: About,
       },
     ]
   },

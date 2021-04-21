@@ -1,4 +1,4 @@
-import React, { ReactElement, useMemo,useState } from 'react'
+import React, { useMemo,useState } from 'react'
 import { Layout,Menu } from 'antd'
 import {
     MenuUnfoldOutlined,
@@ -11,10 +11,8 @@ import routes from '~/src/router';
 
 const { Header, Sider, Footer,Content} = Layout;
 
-interface IProps {
-  children: ReactElement,
-}
-const Index = (props:IProps) => {
+
+const Index:React.FC = ({children}) => {
 
     const [isCollapsed,setIsCollapsed] = useState(false);
     const history = useHistory();
@@ -24,9 +22,9 @@ const Index = (props:IProps) => {
         setIsCollapsed((state)=> !state)
     }
     const menuClick = ({key}) => {
-        history.push(key);
+      history.push(key);
     }
-    console.log("渲染一次")
+
     return (
         <>
           <Layout className="index-layout">
@@ -52,7 +50,7 @@ const Index = (props:IProps) => {
                 </Header>
                 <Content className="content">
                       {
-                        props.children
+                        children
                       }
                 </Content>
                 

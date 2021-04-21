@@ -1,24 +1,34 @@
-import React from 'react'
+import React, { ReactElement } from 'react'
 import {
   BrowserRouter as Router,
+  Switch,
   Route
 } from 'react-router-dom';
 import Routes from '~/src/router'
 import Index from '@/layout/index'
 
-const  App:React.FC<{}> = () => {
+
+const getRoute = (routers: typeof Routes,routes:ReactElement[]=[]) => {
+
+  routers.forEach((item) => {
+    if (!item.children) {
+      routes.push(<Route exact key={item.path} path={item.path} component={item.component} />)
+    } else {
+      getRoute(item.children,routes);
+    }
+  })
+  return routes;
+}
+
+const App: React.FC<{}> = () => {
 
   return (
     <Router>
-        {Routes.map((item:{path:string,component: React.FC})=> (
-          <Route exact key={item.path} path={item.path}>
-            <Index>
-              <item.component />
-            </Index>
-            
-          </Route>
-        )
-        )}
+      <Switch>
+        <Index>
+          {...getRoute(Routes)}
+        </Index>
+      </Switch>
     </Router>
   )
 }
