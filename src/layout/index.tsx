@@ -1,14 +1,14 @@
-import React, {useMemo, useState} from 'react';
-import {Layout, Menu} from 'antd';
-import {MenuUnfoldOutlined, MenuFoldOutlined} from '@ant-design/icons';
+import React, { useMemo, useState } from 'react';
+import { Layout, Menu } from 'antd';
+import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
 import './index.less';
-import {renderMenu} from '@/components/siderItem';
-import {useHistory} from 'react-router-dom';
+import { renderMenu } from '@/components/siderItem';
+import { useHistory } from 'react-router-dom';
 import routes from '~/src/router';
 
-const {Header, Sider, Footer, Content} = Layout;
+const { Header, Sider, Footer, Content } = Layout;
 
-const Index: React.FC = ({children}) => {
+const Index: React.FC = ({ children }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const history = useHistory();
   const menuList = useMemo(() => renderMenu(routes), []);
@@ -16,7 +16,7 @@ const Index: React.FC = ({children}) => {
   const setCollapseStatus = () => {
     setIsCollapsed((state) => !state);
   };
-  const menuClick = ({key}) => {
+  const menuClick = ({ key }) => {
     history.push(key);
   };
 
@@ -47,7 +47,7 @@ const Index: React.FC = ({children}) => {
           </Header>
           <Content className="content">{children}</Content>
 
-          <Footer className="footer">Footer</Footer>
+          <Footer className="footer" />
         </Layout>
       </Layout>
     </>
