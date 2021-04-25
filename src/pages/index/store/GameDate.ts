@@ -1,10 +1,21 @@
+interface levelData {
+  barrierNumber: number;
+  row: number;
+  col: number;
+}
+
 const store = {
   level: 0,
   step: 0,
   barrierNumber: 15,
 };
 
-const levelData: Array<object> = [
+const levelDatas: Array<levelData> = [
+  {
+    barrierNumber: 0,
+    row: 0,
+    col: 0,
+  },
   {
     barrierNumber: 10,
     row: 7,
@@ -57,4 +68,4 @@ const levelData: Array<object> = [
   },
 ];
 
-export { levelData, store };
+export { levelDatas, store };

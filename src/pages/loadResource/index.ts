@@ -70,19 +70,19 @@ const useLoadResource = (canvas, setHide, setNumber) => {
       preload: true,
     },
     {
-      name: 'normalStatus',
+      name: 'nomalcat',
       type: RESOURCE_TYPE.SPRITE_ANIMATION,
       src: {
-        json: {
-          type: 'json',
-          url: '../../../public/resource/assets/img/cat_normal.json',
-        },
         image: {
           type: 'png',
           url: '../../../public/resource/assets/img/cat_normal.png',
         },
+        json: {
+          type: 'json',
+          url: '../../../public/resource/assets/img/cat_normal.json',
+        },
       },
-      preload: true,
+      preload: false,
     },
     {
       name: 'loseStatus',
@@ -117,6 +117,17 @@ const useLoadResource = (canvas, setHide, setNumber) => {
         image: {
           type: 'png',
           url: '../../../public/resource/assets/img/grid_yellow.png',
+        },
+      },
+      preload: false,
+    },
+    {
+      name: 'mask',
+      type: RESOURCE_TYPE.IMAGE,
+      src: {
+        image: {
+          type: 'jpg',
+          url: '../../../public/resource/assets/img/mask.jpg',
         },
       },
       preload: false,

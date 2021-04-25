@@ -332,6 +332,36 @@
     "@eva/renderer-adapter" "^1.0.4"
     pixi.js "^4.8.7"
 
+"@eva/plugin-renderer-render@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@eva/plugin-renderer-render/-/plugin-renderer-render-1.0.4.tgz#fe4a868759b0020dbd2910ae8f2e90358a432085"
+  integrity sha512-MZgiXa2l5auvZZyD/yJHtb47HvKUlmFithvXHpC8Vz5H7bcr1lRmF/M/B0/9ibuu8RLtxNE2Z+d2DyKsyZkmtg==
+  dependencies:
+    "@eva/eva.js" "^1.0.4"
+    "@eva/plugin-renderer" "^1.0.4"
+    "@eva/renderer-adapter" "^1.0.4"
+    pixi.js "^4.8.7"
+
+"@eva/plugin-renderer-sprite-animation@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@eva/plugin-renderer-sprite-animation/-/plugin-renderer-sprite-animation-1.0.4.tgz#3d8327590980dc054f9c5f50e6aa2e4d8c90957c"
+  integrity sha512-TZeoL1kBtTbsuwE3JAS+1Rx80UVM7SMTaGjb7ZS6Tb8Wa8loX0TgRNO6Oswts5gobJNRzcJrBELNyJj7GgllOA==
+  dependencies:
+    "@eva/eva.js" "^1.0.4"
+    "@eva/plugin-renderer" "^1.0.4"
+    "@eva/renderer-adapter" "^1.0.4"
+    pixi.js "^4.8.7"
+
+"@eva/plugin-renderer-text@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@eva/plugin-renderer-text/-/plugin-renderer-text-1.0.4.tgz#9602e351af87f8e5d209d8d9b0dfe98cb1e27f99"
+  integrity sha512-Z4HQ/qe5wYWndmMSEf+HUVSFNfBxiWagsZ9Y6R2EAaJUpG51ZH7ajKk0WUMnTf8UmEhrzUXRFULFKEMtimBN6g==
+  dependencies:
+    "@eva/eva.js" "^1.0.4"
+    "@eva/plugin-renderer" "^1.0.4"
+    "@eva/renderer-adapter" "^1.0.4"
+    pixi.js "^4.8.7"
+
 "@eva/plugin-renderer@^1.0.4":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@eva/plugin-renderer/-/plugin-renderer-1.0.4.tgz#75f4bafda0964b7cdbe65e2d2576481b1b098008"
