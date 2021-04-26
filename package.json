@@ -17,6 +17,7 @@
     "@eva/plugin-renderer-render": "^1.0.4",
     "@eva/plugin-renderer-sprite-animation": "^1.0.4",
     "@eva/plugin-renderer-text": "^1.0.4",
+    "@eva/plugin-sound": "^1.0.4",
     "@eva/plugin-transition": "^1.0.4",
     "antd": "^4.14.0",
     "hox": "^1.1.3",

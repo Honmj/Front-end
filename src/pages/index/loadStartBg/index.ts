@@ -5,11 +5,12 @@ import { Event, EventSystem, HIT_AREA_TYPE } from '@eva/plugin-renderer-event';
 import { Transition, TransitionSystem } from '@eva/plugin-transition';
 import { EvaXSystem, EvaX } from '@eva/plugin-evax';
 import { TextSystem } from '@eva/plugin-renderer-text';
-import { SpriteAnimation, SpriteAnimationSystem } from '@eva/plugin-renderer-sprite-animation';
+import { SpriteAnimationSystem } from '@eva/plugin-renderer-sprite-animation';
+import { SoundSystem } from '@eva/plugin-sound';
 import showGameScene from '../loadGameScene';
 import { store } from '../store/GameDate';
 
-const loadStartScene = (canvas) => {
+const loadStartScene = (canvas: HTMLCanvasElement) => {
   // 创建渲染系统
   const renderSystem = new RendererSystem({
     canvas, // 可选，自动生成 canvas 挂在 game.canvas 上
@@ -33,6 +34,7 @@ const loadStartScene = (canvas) => {
       new EvaXSystem({ store }),
       new TextSystem(),
       new SpriteAnimationSystem(),
+      new SoundSystem(),
     ],
   });
   const evaxManager = new GameObject('evaxManager');
@@ -40,7 +42,7 @@ const loadStartScene = (canvas) => {
     new EvaX({
       events: {
         'store.level': (store, oldStore) => {
-          console.log('数据改变', store, oldStore);
+          // console.log('数据改变', store, oldStore);
         },
       },
     })
@@ -136,25 +138,11 @@ const loadStartScene = (canvas) => {
       },
     })
   );
-  const cat = new GameObject('testCat', {
-    position: { x: 225, y: 400 },
-    size: { width: 300, height: 200 },
-    origin: { x: 0, y: 0 },
-  });
-  const catFrame = cat.addComponent(
-    new SpriteAnimation({
-      resource: 'nomalcat',
-      speed: 300,
-    })
-  );
-  catFrame.play();
 
   background.addChild(catImg);
   background.addChild(btnImg);
   game.scene.addChild(background); // 把游戏对象放入场景，这样画布上就可以显示这张图片了
   game.scene.addChild(evaxManager);
-
-  game.scene.addChild(cat);
 
   startEvt.on('tap', (e) => {
     background.removeChild(catImg);

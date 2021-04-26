@@ -1,7 +1,13 @@
 import { LOAD_EVENT, resource, RESOURCE_TYPE } from '@eva/eva.js';
+import React from 'react';
 import loadStartScene from '../index/loadStartBg';
 
-const useLoadResource = (canvas, setHide, setNumber) => {
+type setState<T> = React.Dispatch<React.SetStateAction<T>>;
+const useLoadResource = (
+  canvas: HTMLCanvasElement,
+  setHide: setState<string>,
+  setNumber: setState<number>
+) => {
   resource.addResource([
     {
       name: 'image1',
@@ -70,7 +76,7 @@ const useLoadResource = (canvas, setHide, setNumber) => {
       preload: true,
     },
     {
-      name: 'nomalcat',
+      name: 'normalCat',
       type: RESOURCE_TYPE.SPRITE_ANIMATION,
       src: {
         image: {
@@ -90,11 +96,11 @@ const useLoadResource = (canvas, setHide, setNumber) => {
       src: {
         json: {
           type: 'json',
-          url: '../../../public/resource/assets/img/cat_loser.json',
+          url: '../../../public/resource/assets/img/cat_lose.json',
         },
         image: {
           type: 'png',
-          url: '../../../public/resource/assets/img/cat_loser.png',
+          url: '../../../public/resource/assets/img/cat_lose.png',
         },
       },
       preload: true,
@@ -132,12 +138,41 @@ const useLoadResource = (canvas, setHide, setNumber) => {
       },
       preload: false,
     },
+    {
+      name: 'clickSound',
+      type: RESOURCE_TYPE.AUDIO,
+      src: {
+        audio: {
+          type: 'audio',
+          url: '../../../public/resource/assets/audio/go.mp3',
+        },
+      },
+      preload: true,
+    },
+    {
+      name: 'successSound',
+      src: {
+        audio: {
+          type: 'audio',
+          url: '../../../public/resource/assets/audio/success.mp3',
+        },
+      },
+      preload: true,
+    },
+    {
+      name: 'failSound',
+      src: {
+        audio: {
+          type: 'audio',
+          url: '../../../public/resource/assets/audio/fail.mp3',
+        },
+      },
+      preload: true,
+    },
   ]);
 
   resource.preload();
-  resource.on(LOAD_EVENT.START, (e) => {
-    console.log('加载中');
-  });
+  resource.on(LOAD_EVENT.START, (e) => {});
   resource.on(LOAD_EVENT.PROGRESS, (e) => {
     setNumber(e.progress * 100);
     // console.log('progress', e);

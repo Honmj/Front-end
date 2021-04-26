@@ -373,6 +373,14 @@
     lodash-es "^4.17.21"
     pixi.js "^4.8.7"
 
+"@eva/plugin-sound@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@eva/plugin-sound/-/plugin-sound-1.0.4.tgz#f0f451218ed01c098dd35976408e289011b0f621"
+  integrity sha512-Ag1DwyXHs5z7R58L5amg9ZiU8YSGyoyHQKMsob48c4jCkNybG6o8r4izbXy2gZZ8+hlTUg54OkBya+JMfjQE1g==
+  dependencies:
+    "@eva/eva.js" "^1.0.4"
+    eventemitter3 "^3.1.2"
+
 "@eva/plugin-transition@^1.0.4":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@eva/plugin-transition/-/plugin-transition-1.0.4.tgz#524572cf8f51898dfb9f3517f1b377f32557a974"

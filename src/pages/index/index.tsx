@@ -1,8 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Game, GameObject, resource } from '@eva/eva.js';
-import { RendererSystem } from '@eva/plugin-renderer';
-import { Img, ImgSystem } from '@eva/plugin-renderer-img';
-import { Event, EventSystem } from '@eva/plugin-renderer-event';
 import useLoadResource from '@/pages/loadResource';
 import './index.less';
 
@@ -11,7 +7,7 @@ const Index = () => {
   const [number, setNumber] = useState(0);
 
   useEffect(() => {
-    const canvas = document.querySelector('#canvas');
+    const canvas = document.querySelector('#canvas') as HTMLCanvasElement;
     // const loading = document.querySelector('#loading');
     useLoadResource(canvas, setHide, setNumber);
   }, []);
