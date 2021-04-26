@@ -132,7 +132,7 @@ const renderGird = (
 
   gameBg.addComponent(new Img({ resource: gridColor }));
 
-  watchGridClick(gameBg, width, gridColor); // 监听格子点击事件
+  watchGridClick(background,gameBg, width, gridColor); // 监听格子点击事件
   background.addChild(gameBg);
   // if (typeof store.gridNodeList[i][j] === 'undefined') {
   //   store.gridNodeList.push([]);
@@ -141,7 +141,7 @@ const renderGird = (
   store.gridNodeList[i][j] = { x, y, width, obj: gameBg }; // 将每个格子对应的位置信息保存到store中
 };
 
-const createCat = () => {
+const createCat = (type:string="normalCat") => {
   const rowNum = levelDatas[store.level].row;
   const xPos = Math.floor(rowNum / 2);
   const position = store.gridNodeList[xPos][xPos];
@@ -160,7 +160,7 @@ const createCat = () => {
   });
   const catFrame = cat.addComponent(
     new SpriteAnimation({
-      resource: 'normalCat',
+      resource: type,
       speed: 100,
     })
   );
@@ -169,7 +169,7 @@ const createCat = () => {
   obj.addChild(cat);
 };
 
-const watchGridClick = (gridObj: GameObject, width: number, gridColor: string) => {
+const watchGridClick = (background:GameObject,gridObj: GameObject, width: number, gridColor: string) => {
   const clickEvt = gridObj.addComponent(
     new Event({
       hitArea: {
@@ -186,12 +186,14 @@ const watchGridClick = (gridObj: GameObject, width: number, gridColor: string) =
     const { gameObject } = e;
     const { catPosition } = store;
     const isCatPos = gameObject._name === `第[${catPosition[0]}][${catPosition[1]}]个`;
-
-    if (gridColor === 'whiteCircle' && !isCatPos) {
+    const resource = gameObject._componentCache.Img.resource;
+    if (gridColor === 'whiteCircle' && !isCatPos && resource !== 'orangeCircle') {
       gridObj.removeComponent(Img);
       gridObj.addComponent(new Img({ resource: 'orangeCircle' }));
-
-      playerRun();
+      if(store.catRunning){
+        return ;
+      }
+      playerRun(background);
     } else {
       console.log('啊哦, 这个已经踩过了！');
     }
@@ -199,13 +201,14 @@ const watchGridClick = (gridObj: GameObject, width: number, gridColor: string) =
   });
 };
 
-const playerRun = () => {
+const playerRun = (background:GameObject) => {
   playSound('clickSound');
   store.step += 1;
   store.catRunning = true;
-  catRun();
+  catRun(background);
 };
 const playSound = (type: string) => {
+
   const soundObj = new GameObject(`${type}sound`);
   const sound = soundObj.addComponent(
     new Sound({
@@ -214,9 +217,29 @@ const playSound = (type: string) => {
       autoplay: true,
     })
   );
-
   sound.play();
 };
 
-const catRun = () => {};
+const catRun = (background:GameObject) => {
+
+
+
+
+
+  store.catRunning = false;
+};
+
+
+const playerFailed = () => {
+
+ }
+const returnFirstPage = (bg: GameObject) => {
+
+}
+
+const playSuccess = () => { 
+  
+  
+  // showGameScene();
+}
 export default showGameScene;
