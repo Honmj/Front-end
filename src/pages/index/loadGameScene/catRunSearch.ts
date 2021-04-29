@@ -74,7 +74,7 @@ const search = (background:GameObject) => {
       }
     }
   }
-  const nextResult: SearchResult = null!;
+  const nextResult: SearchResult = {nextStep: null,hasPath:true};
   if (minStep === Number.MAX_VALUE) {
     // 无路可走，切换状态
 

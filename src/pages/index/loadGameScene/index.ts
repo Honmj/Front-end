@@ -244,6 +244,7 @@ const catRun = (background: GameObject) => {
  
 
   const result  = search(background);
+  console.log("走后的结果",result)
   if(!result.hasPath){
     // 切换状态
   } 
