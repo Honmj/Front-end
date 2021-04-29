@@ -7,6 +7,7 @@ import { SpriteAnimation } from '@eva/plugin-renderer-sprite-animation';
 import { Event, HIT_AREA_TYPE } from '@eva/plugin-renderer-event';
 import { Sound } from '@eva/plugin-sound';
 import { store, levelDatas } from '../store/GameDate';
+import {search} from './catRunSearch'
 
 const showGameScene = (bg: GameObject) => {
   store.level += 1;
@@ -115,7 +116,7 @@ const renderGird = (
   i: number,
   j: number
 ) => {
-  const gameBg = new GameObject(`第[${i}][${j}]个`, {
+  const gameBg = new GameObject(`[${i}][${j}]`, {
     size: {
       width,
       height,
@@ -199,13 +200,17 @@ const watchGridClick = (
   clickEvt.on('tap', (e) => {
     const { gameObject } = e;
     const { catPosition } = store;
-    const isCatPos = gameObject._name === `第[${catPosition[0]}][${catPosition[1]}]个`;
+    const isCatPos = gameObject._name === `[${catPosition[0]}][${catPosition[1]}]`;
     const resource = gameObject._componentCache.Img.resource;
     if (gridColor === 'whiteCircle' && !isCatPos && resource !== 'orangeCircle') {
       gridObj.removeComponent(Img);
       gridObj.addComponent(new Img({ resource: 'orangeCircle' }));
-      // store.gridNodeList[]
-      console.log('看看点的格子', gameObject);
+      
+      const x =  gameObject.name[1];
+      const y =  gameObject.name[4];
+      const preObj = store.gridNodeList[x][y];
+      store.gridNodeList[x][y] = {...preObj, canRun:false};
+      console.log('看看点的格子', gameObject.name[1]);
       if (store.catRunning) {
         return;
       }
@@ -236,6 +241,27 @@ const playSound = (type: string) => {
 };
 
 const catRun = (background: GameObject) => {
+ 
+
+  const result  = search(background);
+  if(!result.hasPath){
+    // 切换状态
+  } 
+   const nextStep = result.nextStep;
+  // 下一步和当前所在位置一样，说明无路可走，玩家赢
+  if (!nextStep  || (nextStep && nextStep.x === store.catPosition[0] && nextStep.y === store.catPosition[1]) ) {
+    // 玩家胜利
+    playSuccess();
+    return ;
+      
+  }
+  // catmove(nextStep)
+  // 猫到达边界，猫赢
+  if (nextStep && nextStep.x * nextStep.y === 0 || nextStep.x === levelDatas[store.level].row - 1 || nextStep.y === levelDatas[store.level].col - 1) {
+      // 猫赢
+      playerFailed();
+      return ;
+  }
   store.catRunning = false;
 };
 

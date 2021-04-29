@@ -1,3 +1,4 @@
+import { GameObject } from '@eva/eva.js';
 import { store, levelDatas } from '../store/GameDate';
 
 interface Point {
@@ -8,7 +9,11 @@ interface Path extends Point {
   step: number;
   firstStep: Point | null;
 }
-const search = () => {
+interface SearchResult {
+  nextStep:Point |  null,
+  hasPath: boolean,
+}
+const search = (background:GameObject) => {
   const row = levelDatas[store.level].row;
   // 记录每个格子走到的最小步数
   const temp: Array<Array<number>> = [[]];
@@ -59,26 +64,26 @@ const search = () => {
         continue;
       }
       // 有猫或有障碍物
-      if (store.gridNodeList[t.x][t.y].getStatus() !== GridNodeStatus.AVAILABLE) {
+      if (!store.gridNodeList[t.x][t.y].canRun) {
         continue;
       }
       if (temp[t.x][t.y] > t.step) {
         temp[t.x][t.y] = t.step;
-        t.firstStep = { ...current.firstStep };
+        t.firstStep = { ...current.firstStep } as Point;
         list.push(t);
       }
     }
   }
-  const nextResult: SearchResult = new SearchResult();
+  const nextResult: SearchResult = null!;
   if (minStep === Number.MAX_VALUE) {
     // 无路可走，切换状态
-    setStatus(CatStatus.UNAVAILABLE);
+
     nextResult.hasPath = false;
   }
   if (result.length === 0) {
     // 没有路可以走出去，那就向四周随机走一格
     firstStepList.forEach((item) => {
-      result.push(item.firstStep);
+      result.push(item.firstStep!);
     });
   }
   if (result.length > 0) {
@@ -88,13 +93,13 @@ const search = () => {
     nextResult.nextStep = list[index];
   } else {
     // 没有路可走，那就走当前坐标（外部判断为当前坐标就知道猫走不了输了）
-    nextResult.nextStep = index;
+    nextResult.nextStep = null;
   }
   return nextResult;
 };
 
 const sortList = (list: Array<Point>): Array<Point> => {
-  const sort: Array<any> = new Array<any>();
+  const sort: Array<any> = [];
   list.forEach((item) => {
     // key就是下一步要走的坐标
     const key = `${item.x}-${item.y}`;
@@ -120,11 +125,11 @@ const sortList = (list: Array<Point>): Array<Point> => {
   sort.sort((a, b) => {
     return b.count - a.count;
   });
-  const result: Array<Point> = new Array<Point>();
+  const result: Array<Point> = [];
 
   sort.forEach((item) => {
     if (item.count === sort[0].count) {
-      result.push(new Point(item.value.x, item.value.y));
+      result.push({x:item.value.x, y:item.value.y});
     }
   });
 
@@ -143,12 +148,12 @@ const getFirstStep = (): Array<Path> => {
       continue;
     }
     // 不可走
-    if (n.GameData.gridNodeList[x][y].getStatus() !== GridNodeStatus.AVAILABLE) {
+    if (!store.gridNodeList[x][y].canRun) {
       continue;
     }
-    const runPath: RunPath = new RunPath(x, y);
+    const runPath: Path = { x, y, step: 0, firstStep: null };
     runPath.step = 1;
-    runPath.firstStep = new Point(x, y);
+    runPath.firstStep = {x,y};
     firstStepList.push(runPath);
   }
   return firstStepList;
