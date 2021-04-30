@@ -7,7 +7,7 @@ import { SpriteAnimation } from '@eva/plugin-renderer-sprite-animation';
 import { Event, HIT_AREA_TYPE } from '@eva/plugin-renderer-event';
 import { Sound } from '@eva/plugin-sound';
 import { store, levelDatas } from '../store/GameDate';
-import {search} from './catRunSearch'
+import { search, Point } from './catRunSearch';
 
 const showGameScene = (bg: GameObject) => {
   store.level += 1;
@@ -174,7 +174,7 @@ const createCat = (type: string = 'normalCat') => {
       speed: 100,
     })
   );
-
+  store.gridNodeList[xPos][xPos] = { ...store.gridNodeList[xPos][xPos], catObj: cat };
   catFrame.play();
   obj.addChild(cat);
 };
@@ -205,12 +205,11 @@ const watchGridClick = (
     if (gridColor === 'whiteCircle' && !isCatPos && resource !== 'orangeCircle') {
       gridObj.removeComponent(Img);
       gridObj.addComponent(new Img({ resource: 'orangeCircle' }));
-      
-      const x =  gameObject.name[1];
-      const y =  gameObject.name[4];
+
+      const x = gameObject.name[1];
+      const y = gameObject.name[4];
       const preObj = store.gridNodeList[x][y];
-      store.gridNodeList[x][y] = {...preObj, canRun:false};
-      console.log('看看点的格子', gameObject.name[1]);
+      store.gridNodeList[x][y] = { ...preObj, canRun: false };
       if (store.catRunning) {
         return;
       }
@@ -241,31 +240,53 @@ const playSound = (type: string) => {
 };
 
 const catRun = (background: GameObject) => {
- 
-
-  const result  = search(background);
-  console.log("走后的结果",result)
-  if(!result.hasPath){
+  const result = search(background);
+  console.log('走后的结果', result);
+  if (!result.hasPath) {
     // 切换状态
-  } 
-   const nextStep = result.nextStep;
+    changeCatStatus();
+  }
+  const nextStep = result.nextStep;
   // 下一步和当前所在位置一样，说明无路可走，玩家赢
-  if (!nextStep  || (nextStep && nextStep.x === store.catPosition[0] && nextStep.y === store.catPosition[1]) ) {
+  if (
+    !nextStep ||
+    (nextStep && nextStep.x === store.catPosition[0] && nextStep.y === store.catPosition[1])
+  ) {
     // 玩家胜利
+    console.log('你赢拉！');
     playSuccess();
-    return ;
-      
+    return;
   }
   // catmove(nextStep)
   // 猫到达边界，猫赢
-  if (nextStep && nextStep.x * nextStep.y === 0 || nextStep.x === levelDatas[store.level].row - 1 || nextStep.y === levelDatas[store.level].col - 1) {
-      // 猫赢
-      playerFailed();
-      return ;
+  if (
+    (nextStep && nextStep.x * nextStep.y === 0) ||
+    nextStep.x === levelDatas[store.level].row - 1 ||
+    nextStep.y === levelDatas[store.level].col - 1
+  ) {
+    // 猫赢
+    playerFailed();
+    console.log('猫赢拉！');
+    return;
   }
+  catMove(nextStep);
   store.catRunning = false;
 };
 
+const changeCatStatus = () => {};
+const catMove = (nextStep: Point) => {
+  const {
+    catPosition: [x, y],
+    gridNodeList,
+  } = store;
+  // console.log('猫的位置', `${x}${y}`);
+  const { obj: prePos, catObj } = gridNodeList[x][y];
+  const { obj: newPos } = gridNodeList[nextStep.x][nextStep.y];
+  prePos.removeChild(catObj);
+  newPos.addChild(catObj);
+  store.catPosition = [nextStep.x, nextStep.y];
+  store.gridNodeList[nextStep.x][nextStep.y] = { ...gridNodeList[nextStep.x][nextStep.y], catObj };
+};
 const playerFailed = () => {};
 const returnFirstPage = (bg: GameObject) => {};
 

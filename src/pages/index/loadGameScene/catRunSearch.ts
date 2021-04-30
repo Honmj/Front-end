@@ -1,7 +1,7 @@
 import { GameObject } from '@eva/eva.js';
 import { store, levelDatas } from '../store/GameDate';
 
-interface Point {
+export interface Point {
   x: number;
   y: number;
 }
@@ -10,10 +10,10 @@ interface Path extends Point {
   firstStep: Point | null;
 }
 interface SearchResult {
-  nextStep:Point |  null,
-  hasPath: boolean,
+  nextStep: Point | null;
+  hasPath: boolean;
 }
-const search = (background:GameObject) => {
+const search = (background: GameObject) => {
   const row = levelDatas[store.level].row;
   // 记录每个格子走到的最小步数
   const temp: Array<Array<number>> = [[]];
@@ -26,6 +26,7 @@ const search = (background:GameObject) => {
   }
   // 获取第一步可走的位置
   const firstStepList = getFirstStep();
+
   const list: Array<Path> = [];
   // 存放到路径列表中
   firstStepList.forEach((item) => {
@@ -37,18 +38,19 @@ const search = (background:GameObject) => {
   // 存放路径集合
   let result: Point[] = [];
   while (list.length > 0) {
-    const current: Path = list.shift()!;
+    const current: Path = list.shift() as Path;
     // 猫到达边界
     if (current.x === 0 || current.y === 0 || current.x === row - 1 || current.y === row - 1) {
       if (current.step < minStep) {
         // 如果当前步数少于最少步数，那么把之前记录的路径集合清掉，保存当前记录
         result = [];
-        result.push(current.firstStep!);
+        result.push({ ...current.firstStep } as Point);
         minStep = current.step;
       } else if (current.step === minStep) {
         // 如果相等，那么添加进路径集合
-        result.push(current.firstStep!);
+        result.push({ ...current.firstStep } as Point);
       }
+      // eslint-disable-next-line no-continue
       continue;
     }
     // 获取当前位置的可走方向（因为单双行缩进不一样导致数组下标不一样，所以需要根据行数获取可走方向）
@@ -74,7 +76,7 @@ const search = (background:GameObject) => {
       }
     }
   }
-  const nextResult: SearchResult = {nextStep: null,hasPath:true};
+  const nextResult: SearchResult = { nextStep: null, hasPath: true };
   if (minStep === Number.MAX_VALUE) {
     // 无路可走，切换状态
 
@@ -87,7 +89,8 @@ const search = (background:GameObject) => {
     });
   }
   if (result.length > 0) {
-    const list = sortList(result);
+    const arr = [...new Set(result)];
+    const list = sortList(arr);
     // 从所有结果中随机选一格，避免出现走固定路线
     const index = Math.floor(Math.random() * list.length);
     nextResult.nextStep = list[index];
@@ -129,7 +132,7 @@ const sortList = (list: Array<Point>): Array<Point> => {
 
   sort.forEach((item) => {
     if (item.count === sort[0].count) {
-      result.push({x:item.value.x, y:item.value.y});
+      result.push({ x: item.value.x, y: item.value.y });
     }
   });
 
@@ -153,7 +156,7 @@ const getFirstStep = (): Array<Path> => {
     }
     const runPath: Path = { x, y, step: 0, firstStep: null };
     runPath.step = 1;
-    runPath.firstStep = {x,y};
+    runPath.firstStep = { x, y };
     firstStepList.push(runPath);
   }
   return firstStepList;
@@ -172,4 +175,5 @@ const getDir = (col: number) => {
   return dir;
 };
 
-export { getDir, search, sortList, getFirstStep };
+// eslint-disable-next-line import/prefer-default-export
+export { search };

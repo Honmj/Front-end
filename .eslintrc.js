@@ -42,5 +42,6 @@ module.exports = {
     'no-use-before-define': 0,
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', '.tsx', 'ts'] }],
     'no-shadow': 0,
+    'no-continue': 0,
   },
 };
