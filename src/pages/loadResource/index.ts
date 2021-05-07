@@ -10,7 +10,7 @@ const useLoadResource = (
 ) => {
   resource.addResource([
     {
-      name: 'image1',
+      name: 'background',
       type: RESOURCE_TYPE.IMAGE,
       src: {
         image: {
@@ -21,7 +21,7 @@ const useLoadResource = (
       preload: true,
     },
     {
-      name: 'image2',
+      name: 'catBackground',
       type: RESOURCE_TYPE.IMAGE,
       src: {
         image: {
@@ -32,7 +32,7 @@ const useLoadResource = (
       preload: true,
     },
     {
-      name: 'image3',
+      name: 'btnStart',
       type: RESOURCE_TYPE.IMAGE,
       src: {
         image: {
@@ -43,7 +43,7 @@ const useLoadResource = (
       preload: true,
     },
     {
-      name: 'image4',
+      name: 'btnReplay',
       type: RESOURCE_TYPE.IMAGE,
       src: {
         image: {
@@ -54,7 +54,7 @@ const useLoadResource = (
       preload: true,
     },
     {
-      name: 'image5',
+      name: 'btnBack',
       type: RESOURCE_TYPE.IMAGE,
       src: {
         image: {
@@ -65,7 +65,7 @@ const useLoadResource = (
       preload: true,
     },
     {
-      name: 'image4',
+      name: 'btnNext',
       type: RESOURCE_TYPE.IMAGE,
       src: {
         image: {
@@ -134,6 +134,28 @@ const useLoadResource = (
         image: {
           type: 'jpg',
           url: '../../../public/resource/assets/img/mask.jpg',
+        },
+      },
+      preload: false,
+    },
+    {
+      name: 'successTip',
+      type: RESOURCE_TYPE.IMAGE,
+      src: {
+        image: {
+          type: 'png',
+          url: '../../../public/resource/assets/img/end_tip_success.png',
+        },
+      },
+      preload: false,
+    },
+    {
+      name: 'failTip',
+      type: RESOURCE_TYPE.IMAGE,
+      src: {
+        image: {
+          type: 'png',
+          url: '../../../public/resource/assets/img/end_tip_fail.png',
         },
       },
       preload: false,

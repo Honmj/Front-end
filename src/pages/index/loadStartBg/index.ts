@@ -37,6 +37,11 @@ const loadStartScene = (canvas: HTMLCanvasElement) => {
       new SoundSystem(),
     ],
   });
+
+  createStartBg(game);
+};
+export const createStartBg = (game: Game) => {
+  store.game = game;
   const evaxManager = new GameObject('evaxManager');
   evaxManager.addComponent(
     new EvaX({
@@ -54,7 +59,7 @@ const loadStartScene = (canvas: HTMLCanvasElement) => {
       height: 800,
     },
   });
-  background.addComponent(new Img({ resource: 'image1' }));
+  background.addComponent(new Img({ resource: 'background' }));
 
   const catImg = new GameObject('catImg', {
     size: {
@@ -66,7 +71,7 @@ const loadStartScene = (canvas: HTMLCanvasElement) => {
       y: 300,
     },
   });
-  catImg.addComponent(new Img({ resource: 'image2' }));
+  catImg.addComponent(new Img({ resource: 'catBackground' }));
   const btnImg = new GameObject('btnImg', {
     size: {
       width: 200,
@@ -77,7 +82,7 @@ const loadStartScene = (canvas: HTMLCanvasElement) => {
       y: 650,
     },
   });
-  btnImg.addComponent(new Img({ resource: 'image3' }));
+  btnImg.addComponent(new Img({ resource: 'btnStart' }));
   const btnAnimation = btnImg.addComponent(new Transition());
   btnAnimation.group = {
     move: [
@@ -144,11 +149,12 @@ const loadStartScene = (canvas: HTMLCanvasElement) => {
   game.scene.addChild(background); // 把游戏对象放入场景，这样画布上就可以显示这张图片了
   game.scene.addChild(evaxManager);
 
-  startEvt.on('tap', (e) => {
+  startEvt.on('tap', () => {
     background.removeChild(catImg);
     background.removeChild(btnImg);
-    showGameScene(background, e);
+    showGameScene(background);
   });
+  return startEvt;
 };
 
 export default loadStartScene;

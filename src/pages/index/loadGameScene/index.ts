@@ -1,17 +1,15 @@
 import { GameObject } from '@eva/eva.js';
-import { Render } from '@eva/plugin-renderer-render';
 import { Img } from '@eva/plugin-renderer-img';
-import { Transition, TransitionSystem } from '@eva/plugin-transition';
 import { Text } from '@eva/plugin-renderer-text';
 import { SpriteAnimation } from '@eva/plugin-renderer-sprite-animation';
 import { Event, HIT_AREA_TYPE } from '@eva/plugin-renderer-event';
 import { Sound } from '@eva/plugin-sound';
-import { store, levelDatas } from '../store/GameDate';
+import { store, levelDatas, nodeList } from '../store/GameDate';
 import { search, Point } from './catRunSearch';
+import { createStartBg } from '../loadStartBg';
 
 const showGameScene = (bg: GameObject) => {
-  store.level += 1;
-  store.gridNodeList = [];
+  storeInit();
   // const maskImg = new GameObject('maskImg', {
   //   size: { width: 500, height: 800 },
   //   origin: { x: 0, y: 0 },
@@ -66,11 +64,15 @@ const showGameScene = (bg: GameObject) => {
     }
   }
 
-  createCat();
+  initCat();
 
   renderLevelMsg(bg);
 };
-
+const storeInit = () => {
+  store.catRunning = false;
+  store.step = 0;
+  store.gridNodeList = [];
+};
 const renderLevelMsg = (background: GameObject) => {
   const levelText = new GameObject('text', {
     position: {
@@ -144,21 +146,22 @@ const renderGird = (
     x,
     y,
     width,
-    obj: gameBg,
+    gridObj: gameBg,
     row: i,
     col: j,
     canRun: gridColor === 'whiteCircle',
   }; // 将每个格子对应的位置信息保存到store中
 };
-
-const createCat = (type: string = 'normalCat') => {
+const initCat = () => {
   const rowNum = levelDatas[store.level].row;
   const xPos = Math.floor(rowNum / 2);
   const position = store.gridNodeList[xPos][xPos];
-  console.log('格子位置', position);
-  const { width, obj } = position;
   store.catPosition = [xPos, xPos];
-  const cat = new GameObject('cat', {
+  createCat('normalCat', position);
+};
+const createCat = (type: string, position: nodeList) => {
+  const { width, gridObj } = position;
+  const cat = new GameObject(`${type}cat`, {
     size: {
       width: 0.8 * width,
       height: 1.2 * width,
@@ -174,9 +177,10 @@ const createCat = (type: string = 'normalCat') => {
       speed: 100,
     })
   );
-  store.gridNodeList[xPos][xPos] = { ...store.gridNodeList[xPos][xPos], catObj: cat };
+  const [x, y] = store.catPosition;
+  store.gridNodeList[x][y] = { ...store.gridNodeList[x][y], catObj: cat };
   catFrame.play();
-  obj.addChild(cat);
+  gridObj.addChild(cat);
 };
 
 const watchGridClick = (
@@ -210,11 +214,13 @@ const watchGridClick = (
       const y = gameObject.name[4];
       const preObj = store.gridNodeList[x][y];
       store.gridNodeList[x][y] = { ...preObj, canRun: false };
+      console.log('看看store', store);
       if (store.catRunning) {
         return;
       }
       playerRun(background);
     } else {
+      playSuccess(background);
       console.log('啊哦, 这个已经踩过了！');
     }
     // console.log(e, gameObject._name);
@@ -222,6 +228,7 @@ const watchGridClick = (
 };
 
 const playerRun = (background: GameObject) => {
+  console.log('玩家走步');
   playSound('clickSound');
   store.step += 1;
   store.catRunning = true;
@@ -254,7 +261,7 @@ const catRun = (background: GameObject) => {
   ) {
     // 玩家胜利
     console.log('你赢拉！');
-    playSuccess();
+    playSuccess(background);
     return;
   }
   // catmove(nextStep)
@@ -265,7 +272,7 @@ const catRun = (background: GameObject) => {
     nextStep.y === levelDatas[store.level].col - 1
   ) {
     // 猫赢
-    playerFailed();
+    playerFailed(background);
     console.log('猫赢拉！');
     return;
   }
@@ -273,24 +280,130 @@ const catRun = (background: GameObject) => {
   store.catRunning = false;
 };
 
-const changeCatStatus = () => {};
 const catMove = (nextStep: Point) => {
   const {
     catPosition: [x, y],
     gridNodeList,
   } = store;
   // console.log('猫的位置', `${x}${y}`);
-  const { obj: prePos, catObj } = gridNodeList[x][y];
-  const { obj: newPos } = gridNodeList[nextStep.x][nextStep.y];
+  const { gridObj: prePos, catObj } = gridNodeList[x][y];
+  const { gridObj: newPos } = gridNodeList[nextStep.x][nextStep.y];
   prePos.removeChild(catObj);
   newPos.addChild(catObj);
   store.catPosition = [nextStep.x, nextStep.y];
   store.gridNodeList[nextStep.x][nextStep.y] = { ...gridNodeList[nextStep.x][nextStep.y], catObj };
 };
-const playerFailed = () => {};
-const returnFirstPage = (bg: GameObject) => {};
-
-const playSuccess = () => {
-  // showGameScene();
+const modalBtnCreate = (
+  firstName: string,
+  firstResource: string,
+  firstEmitFunc: Function,
+  modalObj: GameObject,
+  background: GameObject
+) => {
+  const firstBtn = new GameObject(firstName, {
+    size: {
+      width: 150,
+      height: 80,
+    },
+    position: {
+      x: 30,
+      y: 160,
+    },
+  });
+  firstBtn.addComponent(new Img({ resource: firstResource }));
+  const firstBtnEvt = firstBtn.addComponent(new Event());
+  firstBtnEvt.on('tap', () => {
+    firstEmitFunc(background);
+  });
+  modalObj.addChild(firstBtn);
 };
+const playerFailed = (background: GameObject) => {
+  playSound('failSound');
+  const failModal = new GameObject('failModal', {
+    size: {
+      width: 400,
+      height: 300,
+    },
+    position: {
+      x: 50,
+      y: 250,
+    },
+  });
+  failModal.addComponent(new Img({ resource: 'failTip' }));
+  background.addChild(failModal);
+  const backBtn = new GameObject('backImg', {
+    size: {
+      width: 150,
+      height: 80,
+    },
+    position: {
+      x: 30,
+      y: 160,
+    },
+  });
+  backBtn.addComponent(new Img({ resource: 'btnBack' }));
+  const backEvt = backBtn.addComponent(new Event());
+  backEvt.on('tap', () => {
+    returnFirstPage(background);
+  });
+  failModal.addChild(backBtn);
+
+  const retry = new GameObject('retryImg', {
+    size: {
+      width: 150,
+      height: 80,
+    },
+    position: {
+      x: 220,
+      y: 160,
+    },
+  });
+  retry.addComponent(new Img({ resource: 'btnReplay' }));
+  failModal.addChild(retry);
+  const retryEvt = retry.addComponent(new Event());
+  retryEvt.on('tap', () => {
+    tryAgain(background);
+  });
+};
+
+const tryAgain = (background: GameObject) => {
+  background.remove();
+
+  const startEvt = createStartBg(store.game);
+  startEvt.emit('tap');
+};
+const returnFirstPage = (background: GameObject) => {
+  background.destroy();
+
+  createStartBg(store.game);
+};
+
+const playSuccess = (background: GameObject) => {
+  playSound('successSound');
+  const successModal = new GameObject('successModal', {
+    size: {
+      width: 400,
+      height: 300,
+    },
+    position: {
+      x: 50,
+      y: 250,
+    },
+  });
+  successModal.addComponent(new Img({ resource: 'successTip' }));
+  background.addChild(successModal);
+  modalBtnCreate('nextImg', 'btnNext', nextLevel, successModal, background);
+};
+const nextLevel = (background: GameObject) => {
+  store.level += 1;
+  tryAgain(background);
+};
+export const changeCatStatus = () => {
+  const [x, y] = store.catPosition;
+  const position = store.gridNodeList[x][y];
+  const { gridObj, catObj } = position;
+  gridObj.removeChild(catObj);
+  createCat('loseStatus', position);
+};
+
 export default showGameScene;

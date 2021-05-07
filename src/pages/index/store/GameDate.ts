@@ -1,19 +1,20 @@
-import { GameObject } from '@eva/eva.js';
+import { Game, GameObject } from '@eva/eva.js';
 
 interface levelData {
   barrierNumber: number;
   row: number;
   col: number;
 }
-interface nodeList {
-  obj: GameObject;
+export interface nodeList {
+  gridObj: GameObject;
   [key: string]: any;
 }
 
 const store = {
+  game: {} as Game,
   catPosition: [] as Array<number>,
   catRunning: false,
-  level: 0,
+  level: 1,
   step: 0,
   barrierNumber: 15,
   gridNodeList: [[{}]] as Array<Array<nodeList>>,

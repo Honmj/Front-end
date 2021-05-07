@@ -1,5 +1,6 @@
 import { GameObject } from '@eva/eva.js';
 import { store, levelDatas } from '../store/GameDate';
+import { changeCatStatus } from './index';
 
 export interface Point {
   x: number;
@@ -79,7 +80,7 @@ const search = (background: GameObject) => {
   const nextResult: SearchResult = { nextStep: null, hasPath: true };
   if (minStep === Number.MAX_VALUE) {
     // 无路可走，切换状态
-
+    changeCatStatus();
     nextResult.hasPath = false;
   }
   if (result.length === 0) {
